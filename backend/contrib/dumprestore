@@ -2,7 +2,6 @@
 
 use strict;
 use open ':std', ':encoding(UTF-8)';
-use Modern::Perl '2014';
 use utf8;
 use DBI;
 use JSON;
@@ -10,7 +9,6 @@ use Carp;
 use FindBin qw($Bin);
 use Encode;
 use POSIX;
-use Scalar::Util;
 use Data::Dumper;
 use Getopt::Long::Descriptive;
 use File::Slurp qw/read_file write_file/;
@@ -19,7 +17,11 @@ sub db_open {
 	my ($opt) = @_;
 
 	# "dbi:Pg:dbname=addresses;host=m2.zz.de;port=5433
-	my $dbh=DBI->connect_cached(sprintf("dbi:Pg:dbname=%s", $opt->dbname), $opt->dbuser, $opt->dbpass);
+	my $dbcontact=sprintf("dbi:Pg:dbname=%s", $opt->dbname);
+	if ($opt->dbhost) {
+		$dbcontact.=sprintf(";host=%s", $opt->dbhost);
+	}
+	my $dbh=DBI->connect_cached($dbcontact, $opt->dbuser, $opt->dbpass);
 
 	if (!defined($dbh)) {
 		return undef;
@@ -105,7 +107,8 @@ sub db_restore {
 
 
 my ($opt, $usage) = describe_options(
-	'$Bin %o <some-arg>',
+	"$Bin %o <some-arg>",
+	[ 'dbhost|h=s',	"Database host" ],
 	[ 'dbname|d=s',	"Database name", { required => 1 } ],
 	[ 'dbuser|u=s',	"Database user" ],
 	[ 'dbpass|p=s',	"Database password" ],
