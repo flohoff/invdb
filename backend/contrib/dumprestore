@@ -1,0 +1,133 @@
+#!/usr/bin/perl -w
+
+use strict;
+use open ':std', ':encoding(UTF-8)';
+use Modern::Perl '2014';
+use utf8;
+use DBI;
+use JSON;
+use Carp;
+use FindBin qw($Bin);
+use Encode;
+use POSIX;
+use Scalar::Util;
+use Data::Dumper;
+use Getopt::Long::Descriptive;
+use File::Slurp qw/read_file write_file/;
+
+sub db_open {
+	my ($opt) = @_;
+
+	# "dbi:Pg:dbname=addresses;host=m2.zz.de;port=5433
+	my $dbh=DBI->connect_cached(sprintf("dbi:Pg:dbname=%s", $opt->dbname), $opt->dbuser, $opt->dbpass);
+
+	if (!defined($dbh)) {
+		return undef;
+	}
+
+	$dbh->{pg_enable_utf8} = 1;
+	return $dbh;
+}
+
+sub db_dump {
+	my ($dbh, $opt) = @_;
+
+	my $objectrows=$dbh->selectall_hashref("
+		select	id,
+			uuid,
+			object
+		from	objects",
+		"id")
+		|| die $DBI::errstr;
+
+	my $linkrows=$dbh->selectall_hashref("
+		select	l.id,
+			l.uuid,
+			oa.uuid as from,
+			ob.uuid as to,
+			link
+		from	links l
+			join objects oa on ( ida = oa.id )
+			join objects ob on ( l.idb = ob.id )",
+		"id")
+		|| die $DBI::errstr;
+
+	# Map ida idb from links to the objects uuid
+	my @links=map {
+		$_->{link}=from_json($_->{link});
+		delete($_->{id});
+		$_;
+		} values %{$linkrows};
+
+	# Decode json to perl structure and delete id
+	my @objects=map {
+			delete $_->{id};
+			$_->{object}=from_json($_->{object});
+			$_;
+		} values %{$objectrows};
+
+	write_file($opt->file, to_json({
+		objects => \@objects,
+		links => \@links
+	}));
+}
+
+sub db_restore {
+	my ($dbh, $opt) = @_;
+
+	my $data=from_json(read_file($opt->file));
+
+	my $objectsql=$dbh->prepare("
+		insert into objects ( uuid, object ) values ( ?, ? )
+		") || die $DBI::errstr;
+
+	my $linksql=$dbh->prepare("
+		insert into links ( uuid, ida, idb, link ) values ( ?, ?, ?, ? )
+		") || die $DBI::errstr;
+
+	my $ouuidmap={};
+
+	foreach my $object ( @{$data->{objects}} ) {
+		$objectsql->execute($object->{uuid}, to_json($object->{object})) || die $DBI::errstr;
+
+		# Store Database id of this object
+		$ouuidmap->{$object->{uuid}}=
+			$dbh->last_insert_id(undef, undef, "objects", "id");
+	}
+
+	foreach my $link ( @{$data->{links}} ) {
+		my $ida=$ouuidmap->{$link->{from}};
+		my $idb=$ouuidmap->{$link->{to}};
+
+		$linksql->execute($link->{uuid}, $ida, $idb, to_json($link->{link})) || die $DBI::errstr;
+	}
+}
+
+
+my ($opt, $usage) = describe_options(
+	'$Bin %o <some-arg>',
+	[ 'dbname|d=s',	"Database name", { required => 1 } ],
+	[ 'dbuser|u=s',	"Database user" ],
+	[ 'dbpass|p=s',	"Database password" ],
+	[ "action" => hidden => {
+		default => "dump",
+		one_of => [
+			[ "dump"	=> "dump database" ],
+			[ "restore"	=> "restore database" ],
+		]
+		}
+	],
+	[ 'file=s',	"File to restore or dump to", { required => 1 } ],
+	[],
+	[ 'help',	"print usage message and exit", { shortcircuit => 1 } ],
+);
+
+print($usage->text), exit if $opt->help;
+
+my $dbh=db_open($opt);
+
+if ($opt->action eq 'restore') {
+	db_restore($dbh, $opt);
+} else {
+	db_dump($dbh, $opt);
+}
