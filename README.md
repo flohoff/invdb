@@ -61,4 +61,4 @@ project founders see this degree of automation in the other companies.
 
 This is why they start this project. They want that back.
 
-# vim:set ts=4 sts=4 sw=4 ai et tw=80 syntax=markdown:
+[//] vim:set ts=4 sts=4 sw=4 ai et tw=80 syntax=markdown:
