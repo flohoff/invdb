@@ -9,7 +9,7 @@ Objects are identified by their UUID. The only "essential" attribute
 for an object is the *type*. Everyhing else is "key, value" store where
 values are always arrays of values. 
 
-   {
+    {
       "uuid": "4e665e17-b40a-4c73-b879-31aa9bc7aab1",
       "type": "host",
       "attributes": {
