@@ -9,15 +9,15 @@ Objects are identified by their UUID. The only "essential" attribute
 for an object is the *type*. Everyhing else is "key, value" store where
 values are always arrays of values. 
 
-    {
+   {
       "uuid": "4e665e17-b40a-4c73-b879-31aa9bc7aab1",
-      "object": {
-        "type": "host",
-        "name": [
-          "foobar"
-        ],
+      "type": "host",
+      "attributes": {
         "address": [
           "8.8.8.8"
+        ],
+        "name": [
+          "foobar"
         ]
       }
     }
@@ -32,17 +32,7 @@ are supported.
 
     {
       "uuid": "fb8001b5-4834-493f-9fe0-e5068c095b66",
-      "to": "4e665e17-b40a-4c73-b879-31aa9bc7aab1",
-      "link": {
-        "type": "is-in"
-      },
-      "from": "b56582e8-a452-4e42-903b-9b5cc2a7267f"
+      "type": "is-in",
+      "from": "b56582e8-a452-4e42-903b-9b5cc2a7267f",
+      "to": "4e665e17-b40a-4c73-b879-31aa9bc7aab1"
     }
-
-
-Thoughts
-========
-
-* "type" needs to be protected. As the database is schemaless one might add an attribute "type"
-  * moving user key/values into "attributes"
-  * moving uuid into the object
