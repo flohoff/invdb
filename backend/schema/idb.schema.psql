@@ -47,7 +47,7 @@ CREATE TABLE public.links (
 );
 
 
-ALTER TABLE public.links OWNER TO flo;
+-- ALTER TABLE public.links OWNER TO flo;
 
 --
 -- Name: link_id_seq; Type: SEQUENCE; Schema: public; Owner: flo
@@ -62,7 +62,7 @@ CREATE SEQUENCE public.link_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.link_id_seq OWNER TO flo;
+-- ALTER TABLE public.link_id_seq OWNER TO flo;
 
 --
 -- Name: link_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: flo
@@ -82,7 +82,7 @@ CREATE TABLE public.objects (
 );
 
 
-ALTER TABLE public.objects OWNER TO flo;
+-- ALTER TABLE public.objects OWNER TO flo;
 
 --
 -- Name: object_id_seq; Type: SEQUENCE; Schema: public; Owner: flo
@@ -97,7 +97,7 @@ CREATE SEQUENCE public.object_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.object_id_seq OWNER TO flo;
+-- ALTER TABLE public.object_id_seq OWNER TO flo;
 
 --
 -- Name: object_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: flo

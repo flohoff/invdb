@@ -1,0 +1,19 @@
+
+backendtest:
+  image: amd64/debian:bullseye
+  stage: build
+  services:
+    - postgres:14-alpine
+  tags:
+    - docker-build
+  variables:
+    DEBIAN_FRONTEND: "noninteractive"
+    POSTGRES_DB: idb
+    POSTGRES_USER: root
+    POSTGRES_PASSWORD: root
+    POSTGRES_HOST_AUTH_METHOD: trust
+  script:
+    - apt-get update
+    - apt-get install -fuy postgresql-client libfile-slurp-perl libgetopt-long-descriptive-perl libdbi-perl libdbd-pg-perl libjson-perl
+    - echo "postgres:5432:*:$POSTGRES_USER:$POSTGRES_PASSWORD" >~/.pgpass
+    - run-parts --verbose --exit-on-error backend/test/tests.d

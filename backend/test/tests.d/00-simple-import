@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -x
+set -e
+
+BASE=$(dirname $(readlink -f $0))
+
+psql -h postgres \
+    -U $POSTGRES_USER \
+    $POSTGRES_DB \
+    -f ${BASE}/../../schema/idb.schema.psql
+
+${BASE}/../../contrib/dumprestore --restore \
+    --dbhost postgres \
+    --dbname $POSTGRES_DB \
+    --dbuser $POSTGRES_USER \
+    --dbpass $POSTGRES_PASSWORD \
+    --file ${BASE}/../data/simple1.json
+
