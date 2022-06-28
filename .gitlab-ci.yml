@@ -15,5 +15,5 @@ backendtest:
   script:
     - apt-get update
     - apt-get install -fuy postgresql-client libfile-slurp-perl libgetopt-long-descriptive-perl libdbi-perl libdbd-pg-perl libjson-perl
-    - echo "postgres:5432:*:$POSTGRES_USER:$POSTGRES_PASSWORD" >~/.pgpass
+    - ( umask 066 ; echo "postgres:5432:*:$POSTGRES_USER:$POSTGRES_PASSWORD" >~/.pgpass )
     - run-parts --verbose --exit-on-error backend/test/tests.d
