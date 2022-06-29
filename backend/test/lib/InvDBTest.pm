@@ -78,4 +78,27 @@ package InvDBTest;
 
 		return $rows->{$uuid};
 	}
+
+	sub db_link_by_uuid_exists {
+		my ($self, $linkuuid) = @_;
+
+		my $result=$self->db_link_by_uuid($linkuuid);
+
+		return defined($result);
+	}
+
+	sub db_link_by_uuid {
+		my ($self, $uuid) = @_;
+
+		my $rows=$self->{dbh}->selectall_hashref("
+			select	*
+			from	public.links
+			where	uuid = ?
+			",
+			"uuid", undef, $uuid) || die $DBI::errstr;
+
+		return $rows->{$uuid};
+	}
+
+
 1;
