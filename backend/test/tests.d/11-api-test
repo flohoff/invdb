@@ -3,5 +3,7 @@
 set -x
 set -e
 
-backend/proove -l -v
+cd backend
+
+proove -l -v
 
