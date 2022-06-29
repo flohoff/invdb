@@ -1,19 +1,45 @@
-#!/bin/sh
+#!/usr/bin/perl -w
 
-set -x
-set -e
+use strict;
+use FindBin qw($Bin);
+use lib "$Bin/../lib";
+use InvDBTest;
 
-BASE=$(dirname $(readlink -f $0))
+my $dumprestore="$Bin/../../contrib/dumprestore";
+my $simpleone="$Bin/../data/simple1.json";
 
-psql -h postgres \
-    -U $POSTGRES_USER \
-    $POSTGRES_DB \
-    -f ${BASE}/../../schema/idb.schema.psql
+my $idbt=new InvDBTest();
 
-${BASE}/../../contrib/dumprestore --restore \
-    --dbhost postgres \
-    --dbname $POSTGRES_DB \
-    --dbuser $POSTGRES_USER \
-    --dbpass $POSTGRES_PASSWORD \
-    --file ${BASE}/../data/simple1.json
+$idbt->db_clean();
+$idbt->db_schema_add("$Bin/../../schema/idb.schema.psql");
 
+my $cmd=sprintf("%s --restore --dbhost postgres --dbname %s --dbuser %s --dpbass %s --file %s",
+	$dumprestore,
+	$ENV{POSTGRES_DB},
+	$ENV{POSTGRES_USER},
+	$ENV{POSTGRES_PASS},
+	$simpleone);
+
+system($cmd);
+
+#
+
+# #!/bin/sh
+# 
+# set -x
+# set -e
+# 
+# BASE=$(dirname $(readlink -f $0))
+# 
+# psql -h postgres \
+#     -U $POSTGRES_USER \
+#     $POSTGRES_DB \
+#     -f ${BASE}/../../schema/idb.schema.psql
+# 
+# ${BASE}/../../contrib/dumprestore --restore \
+#     --dbhost postgres \
+#     --dbname $POSTGRES_DB \
+#     --dbuser $POSTGRES_USER \
+#     --dbpass $POSTGRES_PASSWORD \
+#     --file ${BASE}/../data/simple1.json
+# 
