@@ -22,5 +22,9 @@ my $cmd=sprintf("%s --restore --dbhost postgres --dbname %s --dbuser %s --dbpass
 	$simpleone);
 
 ok(system($cmd) == 0, "Restore succeeded");
+
+system(sprintf("pg_dump --host postgres --dbname %s --username %s",
+			$ENV{POSTGRES_DB}, $ENV{POSTGRES_USER}));
+
 ok($idbt->db_object_by_uuid_exists("b56582e8-a452-4e42-903b-9b5cc2a7267f"), "Object b56582e8-a452-4e42-903b-9b5cc2a7267f exists");
 
