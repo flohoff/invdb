@@ -50,4 +50,25 @@ package InvDBTest;
 		my $sql=read_file($schemafile);
 		$self->{dbh}->do("$sql") || die $DBI::errstr;
 	}
+
+	sub db_object_uuidexists {
+		my ($self, $objectuuid) = @_;
+
+		my $result=$self->db_object_by_uuid($objectuuid);
+
+		return defined($result);
+	}
+
+	sub db_object_by_uuid {
+		my ($self, $uuid) = @_;
+
+		my $rows=$self->{dbh}->selectall_hashref("
+			select	*
+			from	object
+			where	uuid = ?
+			",
+			"uuid", $uuid) || die $DBI::errstr;
+
+		return $rows->{uuid};
+	}
 1;
