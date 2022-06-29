@@ -3,7 +3,7 @@ backendtest:
   image: amd64/debian:bullseye
   stage: build
   services:
-    - postgres:14-alpine
+    - postgres:13-alpine
   tags:
     - docker-build
   variables:
