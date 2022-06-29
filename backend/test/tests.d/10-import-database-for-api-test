@@ -23,6 +23,6 @@ my $cmd=sprintf("%s --restore --dbhost postgres --dbname %s --dbuser %s --dbpass
 	$simpleone);
 
 write_file("$Bin/../../backend.conf", to_json({
-	pg => sprintf("postgresql://%s:%s@postgres/%s", $ENV{POSTGRES_USER}, $ENV{POSTGRES_PASSWORD}, $ENV{POSTGRES_DB}),
+	pg => sprintf("postgresql://%s:%s\@postgres/%s", $ENV{POSTGRES_USER}, $ENV{POSTGRES_PASSWORD}, $ENV{POSTGRES_DB}),
 	secrets => 'secret'
 	}));
