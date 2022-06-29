@@ -48,6 +48,6 @@ package InvDBTest;
 		my ($self, $schemafile) = @_;
 
 		my $sql=read_file($schemafile);
-		$self->{dbh}->do("BEGIN $sql COMMIT;") || die $DBI::errstr;
+		$self->{dbh}->do("$sql") || die $DBI::errstr;
 	}
 1;
