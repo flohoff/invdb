@@ -37,6 +37,13 @@ package InvDBTest;
 		return $dbh;
 	}
 
+	sub db_dump {
+		my ($self) = @_;
+
+		system(sprintf("pg_dump --host postgres --dbname %s --username %s",
+					$ENV{POSTGRES_DB}, $ENV{POSTGRES_USER}));
+	}
+
 	sub db_clean {
 		my ($self) = @_;
 
@@ -64,7 +71,7 @@ package InvDBTest;
 
 		my $rows=$self->{dbh}->selectall_hashref("
 			select	*
-			from	objects
+			from	public.objects
 			where	uuid = ?
 			",
 			"uuid", undef, $uuid) || die $DBI::errstr;
