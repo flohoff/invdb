@@ -22,6 +22,10 @@ my $cmd=sprintf("%s --restore --dbhost postgres --dbname %s --dbuser %s --dbpass
 	$ENV{POSTGRES_PASSWORD},
 	$simpleone);
 
+$idbt->db_dump();
+
 write_file("$Bin/../../backend.conf", 
 	sprintf("{ pg => 'postgresql://%s:%s\@postgres/%s', secrets => 'secret' }",
 		 $ENV{POSTGRES_USER}, $ENV{POSTGRES_PASSWORD}, $ENV{POSTGRES_DB}));
+
+system("cat $Bin/../../backend.conf");
