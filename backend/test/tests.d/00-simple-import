@@ -13,11 +13,11 @@ my $idbt=new InvDBTest();
 $idbt->db_clean();
 $idbt->db_schema_add("$Bin/../../schema/idb.schema.psql");
 
-my $cmd=sprintf("%s --restore --dbhost postgres --dbname %s --dbuser %s --dpbass %s --file %s",
+my $cmd=sprintf("%s --restore --dbhost postgres --dbname %s --dbuser %s --dbpass %s --file %s",
 	$dumprestore,
 	$ENV{POSTGRES_DB},
 	$ENV{POSTGRES_USER},
-	$ENV{POSTGRES_PASS},
+	$ENV{POSTGRES_PASSWORD},
 	$simpleone);
 
 system($cmd);
