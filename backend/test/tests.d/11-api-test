@@ -5,5 +5,5 @@ set -e
 
 cd backend
 
-proove -l -v
+prove -l -v
 
