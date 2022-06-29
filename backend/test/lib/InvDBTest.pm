@@ -51,7 +51,7 @@ package InvDBTest;
 		$self->{dbh}->do("$sql") || die $DBI::errstr;
 	}
 
-	sub db_object_uuidexists {
+	sub db_object_by_uuid_exists {
 		my ($self, $objectuuid) = @_;
 
 		my $result=$self->db_object_by_uuid($objectuuid);
