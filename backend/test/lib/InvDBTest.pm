@@ -64,7 +64,7 @@ package InvDBTest;
 
 		my $rows=$self->{dbh}->selectall_hashref("
 			select	*
-			from	object
+			from	objects
 			where	uuid = ?
 			",
 			"uuid", undef, $uuid) || die $DBI::errstr;
