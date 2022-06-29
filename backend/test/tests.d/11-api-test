@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -x
+set -e
+
+backend/proove -l -v
+
