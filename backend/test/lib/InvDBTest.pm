@@ -67,7 +67,7 @@ package InvDBTest;
 			from	object
 			where	uuid = ?
 			",
-			"uuid", $uuid) || die $DBI::errstr;
+			"uuid", undef, $uuid) || die $DBI::errstr;
 
 		return $rows->{uuid};
 	}
