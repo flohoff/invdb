@@ -76,6 +76,6 @@ package InvDBTest;
 			",
 			"uuid", undef, $uuid) || die $DBI::errstr;
 
-		return $rows->{uuid};
+		return $rows->{$uuid};
 	}
 1;
