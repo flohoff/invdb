@@ -22,6 +22,8 @@ my $cmd=sprintf("%s --restore --dbhost postgres --dbname %s --dbuser %s --dbpass
 	$ENV{POSTGRES_PASSWORD},
 	$simpleone);
 
+system($cmd);
+
 $idbt->db_dump();
 
 write_file("$Bin/../../backend.conf", 
