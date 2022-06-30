@@ -1,7 +1,6 @@
-
-package InvDBTest;
+package InvDB::TestHelper;
 	use strict;
-	use File::Slurp qw/read_file/;
+	use File::Slurp qw/read_file write_file/;
 	use DBI;
 
 	sub new {
@@ -22,7 +21,7 @@ package InvDBTest;
 		my $dbname=$ENV{POSTGRES_DB};
 		my $dbuser=$ENV{POSTGRES_USER};
 		my $dbpass=$ENV{POSTGRES_PASSWORD};
-		my $dbhost='postgres';
+		my $dbhost=$ENV{POSTGRES_HOST};
 
 		# "dbi:Pg:dbname=addresses;host=m2.zz.de;port=5433
 		my $dbcontact=sprintf("dbi:Pg:dbname=%s", $dbname);
@@ -98,6 +97,15 @@ package InvDBTest;
 			"uuid", undef, $uuid) || die $DBI::errstr;
 
 		return $rows->{$uuid};
+	}
+
+	sub backend_conf_write {
+		my ($self, $file) = @_;
+
+		write_file($file, 
+			sprintf("{ pg => 'postgresql://%s:%s\@%s/%s', secrets => 'secret' }",
+				 $ENV{POSTGRES_USER}, $ENV{POSTGRES_PASSWORD},
+				 $ENV{POSTGRES_HOST}, $ENV{POSTGRES_DB}));
 	}
 
 
