@@ -17,4 +17,4 @@ backendtest:
     - apt-get update
     - apt-get install -fuy postgresql-client libfile-slurp-perl libgetopt-long-descriptive-perl libdbi-perl libdbd-pg-perl libjson-perl libmojolicious-perl libmojo-pg-perl
     - ( umask 066 ; echo "postgres:5432:*:$POSTGRES_USER:$POSTGRES_PASSWORD" >~/.pgpass )
-    - prove -l -v backend/t
+    - ( cd backend ; prove -l -v t )
