@@ -12,8 +12,8 @@ my $t = Test::Mojo->new('InvDB::Backend');
 
 $t->get_ok('/v1/object/b56582e8-a452-4e42-903b-9b5cc2a7267f')
 	->status_is(200)
-	->json_is("type" => "interface")
-	->json_is("version" => "20b124d6-f61c-4856-b2fe-7c0264c58860")
-	->json_is("attributes/name/0" => 'eth0');
+	->json_is("/type" => "interface")
+	->json_is("/version" => "20b124d6-f61c-4856-b2fe-7c0264c58860")
+	->json_is("/attributes/name/0" => 'eth0');
 
 done_testing();
