@@ -1,0 +1,4 @@
+{
+	pg      => 'postgresql:///idb',
+	secrets => 'secret'
+}
