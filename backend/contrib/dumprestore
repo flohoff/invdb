@@ -37,6 +37,7 @@ sub db_dump {
 	my $objectrows=$dbh->selectall_hashref("
 		select	id,
 			uuid,
+			version,
 			object
 		from	objects",
 		"id")
@@ -45,6 +46,7 @@ sub db_dump {
 	my $linkrows=$dbh->selectall_hashref("
 		select	l.id,
 			l.uuid,
+			l.version as version,
 			oa.uuid as from,
 			ob.uuid as to,
 			link
@@ -60,6 +62,7 @@ sub db_dump {
 		$l->{from}=$_->{from};
 		$l->{to}=$_->{to};
 		$l->{uuid}=$_->{uuid};
+		$l->{version}=$_->{version};
 		$l;
 		} values %{$linkrows};
 
@@ -67,6 +70,7 @@ sub db_dump {
 	my @objects=map {
 			my $o=from_json($_->{object});
 			$o->{uuid}=$_->{uuid};
+			$o->{version}=$_->{version};
 			$o;
 		} values %{$objectrows};
 
@@ -82,19 +86,21 @@ sub db_restore {
 	my $data=from_json(read_file($opt->file));
 
 	my $objectsql=$dbh->prepare("
-		insert into objects ( uuid, object ) values ( ?, ? )
+		insert into objects ( uuid, version, object ) values ( ?, ?, ? )
 		") || die $DBI::errstr;
 
 	my $linksql=$dbh->prepare("
-		insert into links ( uuid, ida, idb, link ) values ( ?, ?, ?, ? )
+		insert into links ( uuid, version, ida, idb, link ) values ( ?, ?, ?, ?, ? )
 		") || die $DBI::errstr;
 
 	my $ouuidmap={};
 
 	foreach my $object ( @{$data->{objects}} ) {
 		my $uuid=$object->{uuid};
+		my $version=$object->{version};
 		delete $object->{uuid};
-		$objectsql->execute($uuid, to_json($object)) || die $DBI::errstr;
+		delete $object->{version};
+		$objectsql->execute($uuid, $version, to_json($object)) || die $DBI::errstr;
 
 		# Store Database id of this object
 		$ouuidmap->{$uuid}=
@@ -111,7 +117,10 @@ sub db_restore {
 		my $uuid=$link->{uuid};
 		delete($link->{uuid});
 
-		$linksql->execute($uuid, $ida, $idb, to_json($link)) || die $DBI::errstr;
+		my $version=$link->{version};
+		delete($link->{version});
+
+		$linksql->execute($uuid, $version, $ida, $idb, to_json($link)) || die $DBI::errstr;
 	}
 }
 
