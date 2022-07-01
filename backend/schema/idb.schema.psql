@@ -24,7 +24,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 
 
 --
--- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
 --
 
 COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
@@ -35,7 +35,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: links; Type: TABLE; Schema: public; Owner: flo
+-- Name: links; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.links (
@@ -43,14 +43,13 @@ CREATE TABLE public.links (
     uuid uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     ida integer,
     idb integer,
-    link jsonb
+    link jsonb,
+    version uuid DEFAULT public.uuid_generate_v4() NOT NULL
 );
 
 
--- ALTER TABLE public.links OWNER TO flo;
-
 --
--- Name: link_id_seq; Type: SEQUENCE; Schema: public; Owner: flo
+-- Name: link_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.link_id_seq
@@ -62,30 +61,27 @@ CREATE SEQUENCE public.link_id_seq
     CACHE 1;
 
 
--- ALTER TABLE public.link_id_seq OWNER TO flo;
-
 --
--- Name: link_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: flo
+-- Name: link_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.link_id_seq OWNED BY public.links.id;
 
 
 --
--- Name: objects; Type: TABLE; Schema: public; Owner: flo
+-- Name: objects; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.objects (
     id integer NOT NULL,
     uuid uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    object jsonb
+    object jsonb,
+    version uuid DEFAULT public.uuid_generate_v4() NOT NULL
 );
 
 
--- ALTER TABLE public.objects OWNER TO flo;
-
 --
--- Name: object_id_seq; Type: SEQUENCE; Schema: public; Owner: flo
+-- Name: object_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.object_id_seq
@@ -97,31 +93,29 @@ CREATE SEQUENCE public.object_id_seq
     CACHE 1;
 
 
--- ALTER TABLE public.object_id_seq OWNER TO flo;
-
 --
--- Name: object_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: flo
+-- Name: object_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.object_id_seq OWNED BY public.objects.id;
 
 
 --
--- Name: links id; Type: DEFAULT; Schema: public; Owner: flo
+-- Name: links id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.links ALTER COLUMN id SET DEFAULT nextval('public.link_id_seq'::regclass);
 
 
 --
--- Name: objects id; Type: DEFAULT; Schema: public; Owner: flo
+-- Name: objects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.objects ALTER COLUMN id SET DEFAULT nextval('public.object_id_seq'::regclass);
 
 
 --
--- Name: links link_pkey; Type: CONSTRAINT; Schema: public; Owner: flo
+-- Name: links link_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.links
@@ -129,7 +123,7 @@ ALTER TABLE ONLY public.links
 
 
 --
--- Name: links link_uuid_key; Type: CONSTRAINT; Schema: public; Owner: flo
+-- Name: links link_uuid_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.links
@@ -137,7 +131,7 @@ ALTER TABLE ONLY public.links
 
 
 --
--- Name: objects object_pkey; Type: CONSTRAINT; Schema: public; Owner: flo
+-- Name: objects object_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.objects
@@ -145,7 +139,7 @@ ALTER TABLE ONLY public.objects
 
 
 --
--- Name: objects object_uuid_key; Type: CONSTRAINT; Schema: public; Owner: flo
+-- Name: objects object_uuid_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.objects
@@ -153,7 +147,7 @@ ALTER TABLE ONLY public.objects
 
 
 --
--- Name: links link_ida_fkey; Type: FK CONSTRAINT; Schema: public; Owner: flo
+-- Name: links link_ida_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.links
@@ -161,7 +155,7 @@ ALTER TABLE ONLY public.links
 
 
 --
--- Name: links link_idb_fkey; Type: FK CONSTRAINT; Schema: public; Owner: flo
+-- Name: links link_idb_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.links
