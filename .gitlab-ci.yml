@@ -21,6 +21,6 @@ backendtest:
     - apt-get update
     - apt-get install -fuy postgresql-client libfile-slurp-perl libgetopt-long-descriptive-perl libdbi-perl libdbd-pg-perl libjson-perl libmojolicious-perl libmojo-pg-perl libossp-uuid-perl
     - apt-get install -fuy curl
-    - curl --noproxy "localhost" -XGET ${OS_URI} -u $OS_USER:$OS_PASSWORD --insecure
+    - curl --noproxy '*' -XGET ${OS_URI} -u $OS_USER:$OS_PASSWORD --insecure
     - ( umask 066 ; echo "postgres:5432:*:$POSTGRES_USER:$POSTGRES_PASSWORD" >~/.pgpass )
     - ( cd backend ; prove -l -v t )
