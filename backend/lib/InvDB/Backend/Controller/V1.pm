@@ -31,6 +31,12 @@ sub object_post_uuid($self) {
 	if ($new->{version} ne $old->{version}) {
 		return $self->return_error(400, "New and old version do not match");
 	}
+	if (!defined($new->{type})) {
+		return $self->return_error(400, "Need object type");
+	}
+	if (!defined($new->{attributes})) {
+		return $self->return_error(400, "Needs at least an empty attributes key");
+	}
 
 	my $object=$self->dbobject->update($uuid, $new);
 
@@ -46,6 +52,7 @@ sub object_post($self) {
 	if (defined($j->{uuid})) {
 		return $self->return_error(400, "New object must not have uuid");
 	}
+
 	if (!defined($j->{type})) {
 		return $self->return_error(400, "Need object type");
 	}
