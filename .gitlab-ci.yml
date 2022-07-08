@@ -5,6 +5,7 @@ backendtest:
   services:
     - name: postgres:13-alpine
     - name: opensearchproject/opensearch:2.0.1
+      alias: opensearch
       variables:
         discovery.type: single-node
   tags:
@@ -18,7 +19,7 @@ backendtest:
     POSTGRES_HOST_AUTH_METHOD: trust
     OS_USER: admin
     OS_PASSWORD: admin
-    OS_URI: http://localhost:9200
+    OS_URI: http://opensearch:9200
   script:
     - apt-get update
     - apt-get install -fuy postgresql-client libfile-slurp-perl libgetopt-long-descriptive-perl libdbi-perl libdbd-pg-perl libjson-perl libmojolicious-perl libmojo-pg-perl libossp-uuid-perl
