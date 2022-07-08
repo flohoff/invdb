@@ -3,8 +3,8 @@ backendtest:
   image: amd64/debian:bullseye
   stage: build
   services:
-    - postgres:13-alpine
-    - opensearchproject/opensearch:2.0.1
+    - name: postgres:13-alpine
+    - name: opensearchproject/opensearch:2.0.1
       variables:
         discovery.type: single-node
   tags:
