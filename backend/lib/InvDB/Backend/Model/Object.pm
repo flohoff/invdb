@@ -62,6 +62,18 @@ sub uuid_v4($self) {
 	return $uuid->export("str");
 }
 
+sub update($self, $uuid, $newobject) {
+	my $newversion=$self->uuid_v4();
+	$newobject->{version}=$newversion;
+
+	$self->pg->db->update('objects', {
+			version => $newversion,
+			object => encode_json($newobject)
+		}, { uuid => $uuid });
+
+	return $self->get($uuid);
+}
+
 sub add($self, $newobject) {
 
 	my $newuuid=$self->uuid_v4();

@@ -20,12 +20,21 @@ sub return_error($self, $error, $message) {
 }
 
 sub object_post_uuid($self) {
-	my $j=$self->req->json();
+	my $new=$self->req->json();
 	my $uuid=$self->param("uuid");
 
-	my $oldobject=$self->dbobject->get($uuid);
+	my $old=$self->dbobject->get($uuid);
 
-	$self->render(json => $j);
+	if ($new->{uuid} ne $old->{uuid}) {
+		return $self->return_error(400, "New and old uuid do not match");
+	}
+	if ($new->{version} ne $old->{version}) {
+		return $self->return_error(400, "New and old version do not match");
+	}
+
+	my $object=$self->dbobject->update($uuid, $new);
+
+	$self->render(json => $object);
 }
 
 sub object_post($self) {
