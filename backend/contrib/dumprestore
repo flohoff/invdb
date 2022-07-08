@@ -59,18 +59,12 @@ sub db_dump {
 	# Map ida idb from links to the objects uuid
 	my @links=map {
 		my $l=from_json($_->{link});
-		$l->{from}=$_->{from};
-		$l->{to}=$_->{to};
-		$l->{uuid}=$_->{uuid};
-		$l->{version}=$_->{version};
 		$l;
 		} values %{$linkrows};
 
 	# Decode json to perl structure and delete id
 	my @objects=map {
 			my $o=from_json($_->{object});
-			$o->{uuid}=$_->{uuid};
-			$o->{version}=$_->{version};
 			$o;
 		} values %{$objectrows};
 
@@ -96,14 +90,10 @@ sub db_restore {
 	my $ouuidmap={};
 
 	foreach my $object ( @{$data->{objects}} ) {
-		my $uuid=$object->{uuid};
-		my $version=$object->{version};
-		delete $object->{uuid};
-		delete $object->{version};
-		$objectsql->execute($uuid, $version, to_json($object)) || die $DBI::errstr;
+		$objectsql->execute($object->{uuid}, $object->{version}, to_json($object)) || die $DBI::errstr;
 
 		# Store Database id of this object
-		$ouuidmap->{$uuid}=
+		$ouuidmap->{$object->{uuid}}=
 			$dbh->last_insert_id(undef, undef, "objects", "id");
 	}
 
@@ -111,16 +101,7 @@ sub db_restore {
 		my $ida=$ouuidmap->{$link->{from}};
 		my $idb=$ouuidmap->{$link->{to}};
 
-		delete($link->{from});
-		delete($link->{to});
-
-		my $uuid=$link->{uuid};
-		delete($link->{uuid});
-
-		my $version=$link->{version};
-		delete($link->{version});
-
-		$linksql->execute($uuid, $version, $ida, $idb, to_json($link)) || die $DBI::errstr;
+		$linksql->execute($link->{uuid}, $link->{version}, $ida, $idb, to_json($link)) || die $DBI::errstr;
 	}
 }
 

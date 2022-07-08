@@ -40,11 +40,11 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.links (
     id integer NOT NULL,
-    uuid uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     ida integer,
     idb integer,
-    link jsonb,
-    version uuid DEFAULT public.uuid_generate_v4() NOT NULL
+    uuid uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    version uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    link jsonb
 );
 
 
@@ -75,8 +75,8 @@ ALTER SEQUENCE public.link_id_seq OWNED BY public.links.id;
 CREATE TABLE public.objects (
     id integer NOT NULL,
     uuid uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    object jsonb,
-    version uuid DEFAULT public.uuid_generate_v4() NOT NULL
+    version uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    object jsonb
 );
 
 
