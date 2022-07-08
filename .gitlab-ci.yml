@@ -5,6 +5,8 @@ backendtest:
   services:
     - postgres:13-alpine
     - opensearchproject/opensearch:2.0.1
+      variables:
+        discovery.type: single-node
   tags:
     - docker-build
   variables:
