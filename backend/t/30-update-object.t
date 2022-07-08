@@ -38,4 +38,8 @@ $t->post_ok("/v1/object/$uuid" => json => $json)
 	->json_has("/version")
 	->json_unlike("/version" => qr/$version/);
 
+# Check if another update with old version suceeds (it shouldnt)
+$t->post_ok("/v1/object/$uuid" => json => $json)
+	->status_is(400);
+
 done_testing();
