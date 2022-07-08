@@ -7,12 +7,7 @@ has 'pg';
 
 sub get ($self, $uuid) {
   my $row=$self->pg->db->select('objects', '*', { uuid => $uuid })->hash;
-
   my $object=decode_json($row->{object});
-
-  $object->{uuid}=$row->{uuid};
-  $object->{version}=$row->{version};
-
   return $object;
 }
 
