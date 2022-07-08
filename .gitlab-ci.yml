@@ -15,6 +15,6 @@ backendtest:
     POSTGRES_HOST_AUTH_METHOD: trust
   script:
     - apt-get update
-    - apt-get install -fuy postgresql-client libfile-slurp-perl libgetopt-long-descriptive-perl libdbi-perl libdbd-pg-perl libjson-perl libmojolicious-perl libmojo-pg-perl
+    - apt-get install -fuy postgresql-client libfile-slurp-perl libgetopt-long-descriptive-perl libdbi-perl libdbd-pg-perl libjson-perl libmojolicious-perl libmojo-pg-perl libossp-uuid-perl
     - ( umask 066 ; echo "postgres:5432:*:$POSTGRES_USER:$POSTGRES_PASSWORD" >~/.pgpass )
     - ( cd backend ; prove -l -v t )

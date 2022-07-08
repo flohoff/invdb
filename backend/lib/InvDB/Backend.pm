@@ -20,7 +20,9 @@ sub startup ($self) {
 	# Normal route to controller
 
 	my $v1=$r->under('/v1/');
-	$v1->any([ 'GET', 'POST', 'DELETE' ] => '/object/:uuid')->to('v1#object');
+	$v1->get("/object/:uuid")->to('v1#object_get');
+	$v1->post("/object")->to('v1#object_post');
+	$v1->post("/object/:uuid")->to('v1#object_post_uuid');
 }
 
 1;
