@@ -51,12 +51,12 @@ sub db_dump {
 			ob.uuid as to,
 			link
 		from	links l
-			join objects oa on ( ida = oa.id )
-			join objects ob on ( l.idb = ob.id )",
+			join objects oa on ( l.from_objectid = oa.id )
+			join objects ob on ( l.to_objectid = ob.id )",
 		"id")
 		|| die $DBI::errstr;
 
-	# Map ida idb from links to the objects uuid
+	# Map from_objectid to_objectid from links to the objects uuid
 	my @links=map {
 		my $l=from_json($_->{link});
 		$l;
@@ -84,7 +84,7 @@ sub db_restore {
 		") || die $DBI::errstr;
 
 	my $linksql=$dbh->prepare("
-		insert into links ( uuid, version, ida, idb, link ) values ( ?, ?, ?, ?, ? )
+		insert into links ( uuid, version, from_objectid, to_objectid, link ) values ( ?, ?, ?, ?, ? )
 		") || die $DBI::errstr;
 
 	my $ouuidmap={};
@@ -98,10 +98,10 @@ sub db_restore {
 	}
 
 	foreach my $link ( @{$data->{links}} ) {
-		my $ida=$ouuidmap->{$link->{from}};
-		my $idb=$ouuidmap->{$link->{to}};
+		my $fromid=$ouuidmap->{$link->{from}};
+		my $toid=$ouuidmap->{$link->{to}};
 
-		$linksql->execute($link->{uuid}, $link->{version}, $ida, $idb, to_json($link)) || die $DBI::errstr;
+		$linksql->execute($link->{uuid}, $link->{version}, $fromid, $toid, to_json($link)) || die $DBI::errstr;
 	}
 }
 

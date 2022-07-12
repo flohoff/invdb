@@ -12,8 +12,8 @@ sub get_links_from($self, $id) {
 			o.object
 		from	links l
 			join objects o
-				on ( l.idb = o.id )
-		where l.ida = (?);
+				on ( l.to_objectid = o.id )
+		where l.from_objectid = (?);
 		", $id)->hashes;
 
 	my @links=map {
@@ -30,8 +30,8 @@ sub get_links_to($self, $id) {
 			o.object
 		from	links l
 			join objects o
-				on ( l.ida = o.id )
-		where l.idb = (?);
+				on ( l.from_objectid = o.id )
+		where l.to_objectid = (?);
 		", $id)->hashes;
 
 	my @links=map {

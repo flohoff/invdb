@@ -40,8 +40,8 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.links (
     id integer NOT NULL,
-    ida integer,
-    idb integer,
+    from_objectid integer,
+    to_objectid integer,
     uuid uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     version uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     link jsonb
@@ -147,19 +147,19 @@ ALTER TABLE ONLY public.objects
 
 
 --
--- Name: links link_ida_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: links link_from_objectid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.links
-    ADD CONSTRAINT link_ida_fkey FOREIGN KEY (ida) REFERENCES public.objects(id);
+    ADD CONSTRAINT link_from_objectid_fkey FOREIGN KEY (from_objectid) REFERENCES public.objects(id);
 
 
 --
--- Name: links link_idb_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: links link_to_objectid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.links
-    ADD CONSTRAINT link_idb_fkey FOREIGN KEY (idb) REFERENCES public.objects(id);
+    ADD CONSTRAINT link_to_objectid_fkey FOREIGN KEY (to_objectid) REFERENCES public.objects(id);
 
 
 --
