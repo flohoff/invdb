@@ -36,7 +36,7 @@ package InvDB::Backend::OpenSearch;
 		return $results;
 	}
 
-	sub put($self, $uuid, $object) {
+	sub add($self, $uuid, $object) {
 		$self->{e}->index(
 			index => $self->{index},
 			type => $object->{type},
