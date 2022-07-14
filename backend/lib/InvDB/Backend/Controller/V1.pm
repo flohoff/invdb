@@ -62,6 +62,15 @@ sub object_post($self) {
 
 	my $object=$self->dbobject->add($j);
 
+	# Add to opensearch
+	$self->os->add($j->{uuid}, $j);
+
 	$self->render(json => $object);
+}
+
+sub search($self) {
+	my $query=$self->param("q");
+	my $result=$self->os->search($query);
+	$self->render(json => $result);
 }
 1;
