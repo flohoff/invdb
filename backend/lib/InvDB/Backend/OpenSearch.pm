@@ -46,7 +46,7 @@ package InvDB::Backend::OpenSearch;
 			);
 		};
 
-		$self->app->log->info($r);
+		$self->app->log->debug("Indexeval returned: " . Dumper($r));
 	}
 
 	sub index_create($self) {
