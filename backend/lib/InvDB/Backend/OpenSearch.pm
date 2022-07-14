@@ -6,13 +6,14 @@ package InvDB::Backend::OpenSearch;
 
 	has 'elastic';
 
-	sub new($class, $args) {
+	sub new($class, $args, $log) {
 		my $e=Search::Elasticsearch->new(
 			nodes => $args->{nodes}
 		);
 
 		my $self={
 			e => $e,
+			log => $log,
 			index => $args->{index}
 		};
 
@@ -21,7 +22,6 @@ package InvDB::Backend::OpenSearch;
 	}
 
 	sub search($self, $term) {
-
 		my $results=$self->{e}->search(
 			index => $self->{index},
 			body => {
@@ -37,16 +37,15 @@ package InvDB::Backend::OpenSearch;
 	}
 
 	sub add($self, $uuid, $object) {
-		my $r=eval {
-			return $self->{e}->index(
-				index => $self->{index},
-				type => "object",
-				id => $uuid,
-				body => $object
-			);
-		};
 
-		$self->app->log->debug("Indexeval returned: " . Dumper($r));
+		my $r=$self->{e}->index(
+			index => $self->{index},
+			type => "_doc",
+			id => $uuid,
+			body => $object
+		);
+
+		$self->{log}->debug(sprintf("OS index for %s returned %s", $uuid, $r->{result}));
 	}
 
 	sub index_create($self) {

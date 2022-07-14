@@ -14,7 +14,7 @@ sub startup ($self) {
 	
 	$self->helper(pg => sub { state $pg = Mojo::Pg->new(shift->config('pg')); });
 	$self->helper(dbobject => sub { state $dbobject = InvDB::Backend::Model::Object->new(pg => shift->pg); });
-	$self->helper(os => sub { state $os = InvDB::Backend::OpenSearch->new(shift->config('search')); });
+	$self->helper(os => sub { state $os = InvDB::Backend::OpenSearch->new(shift->config('search'), $self->log); });
 
 	$self->os->index_create();
 
