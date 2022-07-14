@@ -1,5 +1,5 @@
 {
-	pg      => "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DB}",
+	pg      => "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}\@${POSTGRES_HOST}/${POSTGRES_DB}",
 	secrets => 'secret',
 	search => {
 		uri => "${OS_URI}",
