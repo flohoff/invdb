@@ -38,7 +38,7 @@ package InvDB::Backend::OpenSearch;
 
 	sub add($self, $uuid, $object) {
 		my $r=eval {
-			$self->{e}->index(
+			return $self->{e}->index(
 				index => $self->{index},
 				type => "object",
 				id => $uuid,
