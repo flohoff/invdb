@@ -63,7 +63,7 @@ sub object_post($self) {
 	my $object=$self->dbobject->add($j);
 
 	# Add to opensearch
-	eval { $self->os->add($j->{uuid}, $j) };
+	$self->os->add($j->{uuid}, $j);
 
 	$self->render(json => $object);
 }
