@@ -6,7 +6,6 @@ use FindBin qw($Bin);
 
 use InvDB::TestHelper;
 my $idbt=new InvDB::TestHelper();
-$idbt->backend_conf_write("$Bin/../backend.conf");
 
 my $t = Test::Mojo->new('InvDB::Backend');
 
