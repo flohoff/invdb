@@ -2,7 +2,7 @@
 	pg      => "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}\@${POSTGRES_HOST}/${POSTGRES_DB}",
 	secrets => 'secret',
 	search => {
-		nodes => "${OS_PROTO}://${OS_USER}:${OS_PASSWORD}\@${OS_NODE}:${OS_PORT}",
+		nodes => "${OS_PROTO}://${OS_USER}:${OS_PASSWORD}\@${OS_HOST}:${OS_PORT}",
 		index => 'invdb'
 	}
 }
