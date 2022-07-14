@@ -1,6 +1,7 @@
 package InvDB::Backend::OpenSearch;
 	use strict;
 	use Mojo::Base -base, -signatures;
+	use Mojo::Log;
 	use Data::Dumper;
 	use Search::Elasticsearch;
 
@@ -37,14 +38,17 @@ package InvDB::Backend::OpenSearch;
 	}
 
 	sub add($self, $uuid, $object) {
-		eval {
+		my $r=eval {
 			$self->{e}->index(
 				index => $self->{index},
 				type => "object",
 				id => $uuid,
 				body => $object
 			);
-		}
+		};
+
+		my $log = Mojo::Log->new;
+		$log->info($r);
 	}
 
 	sub index_create($self) {
