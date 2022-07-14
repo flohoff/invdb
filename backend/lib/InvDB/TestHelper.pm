@@ -98,15 +98,4 @@ package InvDB::TestHelper;
 
 		return $rows->{$uuid};
 	}
-
-	sub backend_conf_write {
-		my ($self, $file) = @_;
-
-		write_file($file, 
-			sprintf("{ pg => 'postgresql://%s:%s\@%s/%s', secrets => 'secret' }",
-				 $ENV{POSTGRES_USER}, $ENV{POSTGRES_PASSWORD},
-				 $ENV{POSTGRES_HOST}, $ENV{POSTGRES_DB}));
-	}
-
-
 1;
